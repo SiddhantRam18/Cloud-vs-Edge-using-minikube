@@ -5,7 +5,7 @@ This project evaluates Kubernetes performance for deploying an Nginx-based Virtu
 
 ## Setup
 Two environments were created:
-- **Cloud:** Default Minikube configuration  
+- **Cloud:** Default Minikube configuration  (2 CPU - Dynamic usage with RAM)
 - **Edge:** Limited resources (2 CPU, 2GB RAM)
 
 The same Nginx deployment was used in both environments for fair comparison.
