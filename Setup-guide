@@ -1,0 +1,76 @@
+# Cloud vs Edge Kubernetes Performance
+
+## Description
+This project evaluates Kubernetes performance for deploying an Nginx VNF in cloud-like and edge-like environments using Minikube.
+
+## Commands Used
+
+### 1. Minikube Setup
+
+### Start Cloud Environment
+minikube start --driver=docker
+### Start Edge Environment
+minikube start --profile=edge --driver=docker --cpus=2 --memory=2048
+Check running profiles
+minikube profile list
+
+### 2. Kubernetes Context Management
+Switch to Cloud
+kubectl config use-context minikube
+Switch to Edge
+kubectl config use-context edge
+Verify current context
+kubectl config current-context
+
+3. VNF Deployment (Nginx)
+Create Deployment
+kubectl create deployment nginx --image=nginx
+Expose Service
+kubectl expose deployment nginx --type=NodePort --port=80
+Check Pods
+kubectl get pods
+Check Services
+kubectl get services
+
+4. Access Service
+Get URL
+minikube service nginx --url
+
+5. ApacheBench (Performance Testing)
+Basic Load Test
+.\ab.exe -n 1000 -c 50 http://127.0.0.1:PORT/
+High Load Test
+.\ab.exe -n 5000 -c 100 http://127.0.0.1:PORT/
+
+6. Metrics Server (Resource Monitoring)
+Enable Metrics Server
+minikube addons enable metrics-server
+View Pod Resource Usage
+kubectl top pods
+
+7. iperf3 (Network Testing)
+Start Server
+.\iperf3.exe -s
+Run Client
+.\iperf3.exe -c 127.0.0.1
+
+8. Prometheus & Grafana Setup (Helm)
+Add Helm Repositories
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+Install Monitoring Stack
+helm install monitoring prometheus-community/kube-prometheus-stack
+Check Pods
+kubectl get pods
+
+9. Grafana Access
+Port Forward
+kubectl port-forward svc/monitoring-grafana 3000:80
+Get Grafana Password (PowerShell)
+[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String((kubectl get secret monitoring-grafana -o jsonpath="{.data.admin-password}")))
+
+10. Troubleshooting Commands
+Describe Pod
+kubectl describe pod <pod-name>
+View Logs
+kubectl logs <pod-name>
